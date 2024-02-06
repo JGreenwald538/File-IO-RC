@@ -6,10 +6,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         try {
-            File myObj = new File("filename.txt");
+            File myObj = new File("input.txt");
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
-                FileWriter myWriter = new FileWriter("filename.txt");
+                FileWriter myWriter = new FileWriter("input.txt");
                 Scanner myReader = new Scanner(System.in);
                 while (true) {
                     System.out.println("Please enter the coordinates in the following format: x1,y1\nx2,y2 or type 'exit' to quit.");
@@ -36,6 +36,7 @@ public class Main {
 
             } else {
                 Scanner myReader = new Scanner(myObj);
+                FileWriter myWriter = new FileWriter("output.txt");
                 while (myReader.hasNextLine()) {
                     String[] coordinates1 = myReader.nextLine().split(",");
                     int x1 = Integer.parseInt(coordinates1[0]);
@@ -44,8 +45,10 @@ public class Main {
                     int x2 = Integer.parseInt(coordinates2[0]);
                     int y2 = Integer.parseInt(coordinates2[1]);
                     System.out.println("The difference in coordinates is " + (x2 - x1) + "," + (y2 - y1) + ".");
+                    myWriter.write((x2 - x1) + "," + (y2 - y1) + "\n");
                 }
                 myReader.close();
+                myWriter.close();
             }
         } catch (IOException e) {
             System.out.println("An error occurred.");
