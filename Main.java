@@ -20,7 +20,6 @@ public class Main {
                         myReader.close();
                         break;
                     }
-                    System.out.println(coordinates1);
                     myWriter.write(coordinates1 + "\n");
                     System.out.print("Enter the second set of coordinates: ");
                     String coordinates2 = myReader.nextLine();
@@ -44,8 +43,9 @@ public class Main {
                     String[] coordinates2 = myReader.nextLine().split(",");
                     int x2 = Integer.parseInt(coordinates2[0]);
                     int y2 = Integer.parseInt(coordinates2[1]);
-                    System.out.println("The difference in coordinates is " + (x2 - x1) + "," + (y2 - y1) + ".");
-                    myWriter.write((x2 - x1) + "," + (y2 - y1) + "\n");
+                    double distance = Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
+                    System.out.println("The distance between the two points is:" + distance);
+                    myWriter.write(distance + "\n");
                 }
                 myReader.close();
                 myWriter.close();
