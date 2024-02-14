@@ -1,55 +1,27 @@
-import java.io.File;
 import java.io.FileWriter;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            File myObj = new File("input.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-                FileWriter myWriter = new FileWriter("input.txt");
-                Scanner myReader = new Scanner(System.in);
-                while (true) {
-                    System.out.println("Please enter the coordinates in the following format: x1,y1\nx2,y2 or type 'exit' to quit.");
-                    System.out.print("Enter the first set of coordinates: ");
-                    String coordinates1 = myReader.nextLine();
-                    if (coordinates1.equals("exit")) {
-                        myWriter.close();
-                        myReader.close();
-                        break;
-                    }
-                    myWriter.write(coordinates1 + "\n");
-                    System.out.print("Enter the second set of coordinates: ");
-                    String coordinates2 = myReader.nextLine();
-                    if (coordinates2.equals("exit")) {
-                        myWriter.close();
-                        myReader.close();
-                        break;
-                    }
-                    myWriter.write(coordinates2 + "\n");
-                }
-                myWriter.close();
-                myReader.close();
+            Scanner scanner = new Scanner(new FileReader("params.txt"));
+            double B = Double.parseDouble(scanner.nextLine()); // 12
+            double R = Double.parseDouble(scanner.nextLine()); // 500
+            double C = Double.parseDouble(scanner.nextLine()); // Convert µF to F
+            int tStart = Integer.parseInt(scanner.nextLine()); // 0
+            int tEnd = Integer.parseInt(scanner.nextLine()); // 1000
+            scanner.close();
 
-            } else {
-                Scanner myReader = new Scanner(myObj);
-                FileWriter myWriter = new FileWriter("output.txt");
-                while (myReader.hasNextLine()) {
-                    String[] coordinates1 = myReader.nextLine().split(",");
-                    int x1 = Integer.parseInt(coordinates1[0]);
-                    int y1 = Integer.parseInt(coordinates1[1]);
-                    String[] coordinates2 = myReader.nextLine().split(",");
-                    int x2 = Integer.parseInt(coordinates2[0]);
-                    int y2 = Integer.parseInt(coordinates2[1]);
-                    double distance = Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
-                    System.out.println("The distance between the two points is:" + distance);
-                    myWriter.write(distance + "\n");
-                }
-                myReader.close();
-                myWriter.close();
+            FileWriter writer = new FileWriter("rc.txt");
+            double dt = (tEnd - tStart) / 100.0; // Assuming 100 steps
+            for (int i = 0; i <= 100; i++) {
+                double t = i * dt;
+                double v = B * (1 - Math.exp((-t)/(R*C))); // Use the corrected equation
+                writer.write(String.format("%.0f  %.5f\n", t, v));
             }
+            writer.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
